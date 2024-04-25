@@ -1,0 +1,2 @@
+class CalculateDividenYieldError(Exception):
+    pass

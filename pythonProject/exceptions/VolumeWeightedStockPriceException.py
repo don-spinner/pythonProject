@@ -1,0 +1,2 @@
+class VolumeWeightedStockPriceException(Exception):
+    pass

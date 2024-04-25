@@ -1,0 +1,2 @@
+class CalculateGeometricMeanException(Exception):
+    pass
