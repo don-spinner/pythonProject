@@ -7,7 +7,7 @@ class TradeRepository:
         self.trades = defaultdict(list)
 
     def add_trade(self, trade):
-        self.trades[trade.stock_symbol].append({
+        self.trades[trade.stock_name].append({
             'trade_id': trade.trade_id,
             'quantity': trade.quantity,
             'indicator': trade.indicator,
@@ -15,7 +15,7 @@ class TradeRepository:
             'timestamp': trade.timestamp
         })
 
-    def get_trades_by_stock_symbol(self, stock_symbol, timestamp=None):
+    def get_trades(self, stock_symbol, timestamp=None):
         trades = self.trades[stock_symbol]
         if timestamp is None:
             return trades

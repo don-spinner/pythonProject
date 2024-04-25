@@ -38,10 +38,10 @@ class StockMarketService:
     def calculate_timestamp_minutes_ago(self, minutes):
         return time.time() - (minutes * 60)
 
-    def calculate_volume_weighted_stock_price(self, stock_symbol, last_x_minutes):
+    def calculate_volume_weighted_stock_price(self, stock_name, last_x_minutes):
         timestamp_x_minutes_ago = self.calculate_timestamp_minutes_ago(last_x_minutes)
-        trades_in_last_x_minutes = self.trade_repository.get_trades_by_stock_symbol(stock_symbol,
-                                                                                    timestamp_x_minutes_ago)
+        trades_in_last_x_minutes = self.trade_repository.get_trades(stock_name,
+                                                                    timestamp_x_minutes_ago)
 
         if not trades_in_last_x_minutes:
             raise VolumeWeightedStockPriceException("No trades in the last {} minutes".format(last_x_minutes))
@@ -100,6 +100,9 @@ try:
 except CalculateDividenYieldError as e:
     print("Error calculating dividend yield:", e)
 new_prices = {'TEA': 35.0, 'POP': 49.0, 'ALE': 25.0, 'GIN': 16.0, 'JOE': 34.0}
+
+#should handle cases of invalid prices, data violation, missing keys, performance when many updates, atomicity,
+#concurrency,log of some of the failures
 service.update_stock_prices(new_prices)
 try:
     print("calculate_dividend_yield after price update", service.calculate_dividend_yield('POP'))
