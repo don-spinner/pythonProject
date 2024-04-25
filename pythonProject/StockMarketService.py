@@ -95,14 +95,24 @@ service = StockMarketService(stock_repository, trade_repository)
 stocks = service.list_stocks(page_number=1, page_size=10)
 for symbol, stock in stocks.items():
     print(symbol, stock.price)
-
-print("calculate_dividend_yield", service.calculate_dividend_yield('POP'))
+try:
+    print("calculate_dividend_yield", service.calculate_dividend_yield('POP'))
+except CalculateDividenYieldError as e:
+    print("Error calculating dividend yield:", e)
 new_prices = {'TEA': 35.0, 'POP': 49.0, 'ALE': 25.0, 'GIN': 16.0, 'JOE': 34.0}
 service.update_stock_prices(new_prices)
-print("calculate_dividend_yield after price update", service.calculate_dividend_yield('POP'))
-
+try:
+    print("calculate_dividend_yield after price update", service.calculate_dividend_yield('POP'))
+except CalculateDividenYieldError as e:
+    print("Error calculating dividend yield:", e)
 service.record_trade(1, 'TEA', 1000, 'BUY', 35)
 service.record_trade(2, 'TEA', 60000, 'SELL', 36)
-print("Volume Weighted Stock Price for TEA last 15 minutes:",
-      service.calculate_volume_weighted_stock_price('TEA', StockMarketService.LAST_X_MINUTES))
-print("Geometric Mean of prices for all stocks:", service.calculate_geometric_mean())
+try:
+    print("Volume Weighted Stock Price for TEA last 15 minutes:",
+          service.calculate_volume_weighted_stock_price('TEA', StockMarketService.LAST_X_MINUTES))
+except VolumeWeightedStockPriceException as v:
+    print("Error calculating volume weighted stock price exception:", e)
+try:
+    print("Geometric Mean of prices for all stocks:", service.calculate_geometric_mean())
+except CalculateGeometricMeanException as e:
+    print("Error calculating geometric mean:", e)
